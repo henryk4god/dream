@@ -1,0 +1,90 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #e8f0fe;
+    margin: 0;
+    padding: 0;
+}
+
+.app-container {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.app-header h2 {
+    font-size: 22px;
+    color: #333;
+    margin: 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 14px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 12px;
+    background: #f9f9f9;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    color: white;
+    background: #4a90e2;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #357ab7;
+}
+
+.share-button {
+    background: #009688;
+}
+
+.share-button:hover {
+    background: #00796b;
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 20px;
+    background: #f1f4f8;
+    font-size: 15px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.loading {
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+@media (max-width: 480px) {
+    .app-container {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .app-header h2 {
+        font-size: 20px;
+    }
+}
