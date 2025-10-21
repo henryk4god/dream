@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblical Dream Interpreter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <h2>Biblical Dream Interpreter</h2>
+        </div>
+
+        <textarea id="dreamInput" rows="6" placeholder="Type your dream here..."></textarea>
+
+        <button onclick="interpretDream()">Interpret Dream</button>
+        <button class="share-button" onclick="copyResult()">Copy Interpretation</button>
+
+        <input type="text" id="hiddenClipboard" style="position:absolute; left:-9999px;" readonly />
+        <div id="resultContainer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
