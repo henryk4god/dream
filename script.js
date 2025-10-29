@@ -1,4 +1,5 @@
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycby5fL95cud7D305J1ycH_8hRSTSqHaDak-Yn2_wsMnwSPoSWy3i9nqcw8_4zLJTtscp/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyA6cSTWaSAwv6nwtkFGzohfaGSPKmtZx-7GX70WQ3QYv4jcAX2KlGqEWTcg8NAmQMd/exec
+";
 
 async function interpretDream() {
   const input = document.getElementById("dreamInput").value.trim();
