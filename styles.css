@@ -1,159 +1,90 @@
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #e8f0fe;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: #e8f0fe;
+  margin: 0;
+  padding: 0;
 }
 
 .app-container {
-    max-width: 400px;
-    width: 90%;
-    margin: 30px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 25px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    box-sizing: border-box; /* This ensures padding is included in width */
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 25px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .app-header {
-    text-align: center;
-    margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .app-header h2 {
-    font-size: 22px;
-    color: #333;
-    margin: 0;
+  font-size: 22px;
+  color: #333;
+  margin: 0;
 }
 
 textarea {
-    width: calc(100% - 28px); /* Account for padding and border */
-    padding: 14px;
-    border-radius: 15px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    resize: vertical;
-    margin-bottom: 12px;
-    background: #f9f9f9;
-    font-family: inherit;
-    box-sizing: border-box; /* This is crucial - includes padding in width */
-    min-height: 120px;
-    max-height: 300px;
-}
-
-textarea:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+  width: 100%;
+  padding: 14px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  resize: vertical;
+  margin-bottom: 12px;
+  background: #f9f9f9;
 }
 
 button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 15px;
-    font-size: 16px;
-    color: white;
-    background: #4a90e2;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-family: inherit;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  color: white;
+  background: #4a90e2;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-    background: #357ab7;
-}
-
-button:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
+  background: #357ab7;
 }
 
 .share-button {
-    background: #009688;
+  background: #009688;
 }
 
 .share-button:hover {
-    background: #00796b;
+  background: #00796b;
 }
 
 .result-box {
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 20px;
-    background: #f1f4f8;
-    font-size: 15px;
-    white-space: pre-wrap;
-    line-height: 1.6;
-    box-sizing: border-box;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #f1f4f8;
+  font-size: 15px;
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
 
 .loading {
-    text-align: center;
-    padding: 15px;
-    font-weight: bold;
-    color: #444;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  color: #444;
 }
 
-#hiddenClipboard {
-    position: absolute;
-    left: -9999px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Mobile responsiveness */
 @media (max-width: 480px) {
-    .app-container {
-        margin: 15px;
-        padding: 15px;
-        width: calc(100% - 30px); /* Full width minus margins */
-    }
+  .app-container {
+    margin: 15px;
+    padding: 15px;
+  }
 
-    .app-header h2 {
-        font-size: 20px;
-    }
-    
-    textarea {
-        width: calc(100% - 28px); /* Consistent padding calculation */
-        padding: 12px;
-    }
-    
-    button {
-        padding: 12px;
-    }
-}
-
-/* Extra small devices */
-@media (max-width: 360px) {
-    .app-container {
-        margin: 10px;
-        padding: 12px;
-        width: calc(100% - 20px);
-        border-radius: 20px;
-    }
-    
-    textarea {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    button {
-        padding: 12px;
-        font-size: 14px;
-    }
-    
-    .result-box {
-        padding: 12px;
-        font-size: 14px;
-    }
+  .app-header h2 {
+    font-size: 20px;
+  }
 }
