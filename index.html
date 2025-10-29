@@ -1,25 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblical Dream Interpreter</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblical Dream Interpreter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+      text-align: center;
+    }
+    textarea {
+      width: 90%;
+      height: 120px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      background: white;
+      border-radius: 10px;
+      min-height: 100px;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="app-header">
-            <h2>Biblical Dream Interpreter</h2>
-        </div>
+  <h2>🌙 Biblical Dream Interpreter</h2>
+  <textarea id="dreamInput" placeholder="Type your dream here..."></textarea><br>
+  <button onclick="interpretDream()">Interpret Dream</button>
 
-        <textarea id="dreamInput" rows="6" placeholder="Type your dream here... (Press Ctrl+Enter to interpret)"></textarea>
+  <div id="result"></div>
 
-        <button onclick="interpretDream()">Interpret Dream</button>
-        <button class="share-button" onclick="copyResult()">Copy Interpretation</button>
+  <script>
+    async function interpretDream() {
+      const userInput = document.getElementById('dreamInput').value.trim();
+      const responseBox = document.getElementById('result');
+      if (!userInput) {
+        responseBox.innerText = "⚠️ Please type a dream first.";
+        return;
+      }
 
-        <div id="resultContainer"></div>
-    </div>
+      responseBox.innerText = "⏳ Interpreting your dream...";
 
-    <script src="script.js"></script>
+      try {
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbyBADhcbWJke-Ng8znc2-VdTfg9ejazn8ttAFsrE6XwyhFxoTAKIY2B75gCGpMqZyfB/exec'; // 🔁 Replace this with your actual URL
+
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: "You are a biblical dream interpreter." },
+              { role: "user", content: userInput }
+            ]
+          }),
+        });
+
+        if (!res.ok) throw new Error("Network response was not ok");
+        const data = await res.json();
+        responseBox.innerText =
+          data?.choices?.[0]?.message?.content || "⚠️ No interpretation returned.";
+
+      } catch (err) {
+        console.error(err);
+        responseBox.innerText = "⚠️ Error: " + err.message;
+      }
+    }
+  </script>
 </body>
 </html>
