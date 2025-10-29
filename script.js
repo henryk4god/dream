@@ -1,5 +1,4 @@
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyA6cSTWaSAwv6nwtkFGzohfaGSPKmtZx-7GX70WQ3QYv4jcAX2KlGqEWTcg8NAmQMd/exec
-";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyA6cSTWaSAwv6nwtkFGzohfaGSPKmtZx-7GX70WQ3QYv4jcAX2KlGqEWTcg8NAmQMd/exec";
 
 async function interpretDream() {
   const input = document.getElementById("dreamInput").value.trim();
@@ -20,18 +19,21 @@ async function interpretDream() {
     });
 
     const data = await response.json();
-    let result = data.choices?.[0]?.message?.content || "No interpretation generated.";
+    let result = data.reply || data.choices?.[0]?.message?.content || "No interpretation generated.";
 
-    result = result.replace(/Title:/g, '👉 Title:')
-                   .replace(/Symbols:/g, '✅ Symbols:')
-                   .replace(/Interpretation:/g, '✅ Interpretation:')
-                   .replace(/Encouragement:/g, '✅ Encouragement:')
-                   .replace(/^[\-\*]\s?/gm, '📍')
-                   .replace(/\*\*(.*?)\*\*/g, '$1');
+    result = result
+      .replace(/Title:/g, '👉 Title:')
+      .replace(/Symbols:/g, '✅ Symbols:')
+      .replace(/Interpretation:/g, '✅ Interpretation:')
+      .replace(/Encouragement:/g, '✅ Encouragement:')
+      .replace(/^[\-\*]\s?/gm, '📍')
+      .replace(/\*\*(.*?)\*\*/g, '$1');
 
     window.latestInterpretation = result.replace(/<[^>]+>/g, '');
     resultContainer.innerHTML = `<div class="result-box">${result}</div>`;
+
   } catch (err) {
+    console.error("Error:", err);
     resultContainer.innerHTML = `<div class="result-box">⚠️ An error occurred. Please try again later.</div>`;
   }
 }
@@ -42,9 +44,7 @@ function copyResult() {
     return;
   }
 
-  const hiddenClipboard = document.getElementById("hiddenClipboard");
-  hiddenClipboard.value = window.latestInterpretation;
-  hiddenClipboard.select();
-  document.execCommand("copy");
-  alert("✅ Interpretation copied to clipboard!");
+  navigator.clipboard.writeText(window.latestInterpretation)
+    .then(() => alert("✅ Interpretation copied to clipboard!"))
+    .catch(() => alert("⚠️ Failed to copy text."));
 }
