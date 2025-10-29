@@ -2,7 +2,7 @@ async function interpretDream() {
   const userInput = document.getElementById('dreamInput').value;
   const responseBox = document.getElementById('result');
 
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbxFVEmYpRmeKxMWt4s2rVtWv1rSRxOne9wm4OL4sLzi7fSyLyA7RJwzZe75YqYomzkN/exec';
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbyBADhcbWJke-Ng8znc2-VdTfg9ejazn8ttAFsrE6XwyhFxoTAKIY2B75gCGpMqZyfB/exec';
 
   responseBox.innerText = "⏳ Interpreting your dream...";
 
