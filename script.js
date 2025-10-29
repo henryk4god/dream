@@ -17,32 +17,22 @@ async function interpretDream() {
     });
 
     const data = await response.json();
-
-    if (!data.success) {
-      throw new Error(data.error || "Interpretation failed");
+    if (data.success) {
+      window.latestInterpretation = data.message;
+      resultContainer.innerHTML = `<div class="result-box">${data.message}</div>`;
+    } else {
+      resultContainer.innerHTML = `<div class="result-box">Error: ${data.error}</div>`;
     }
-
-    let result = data.message || "No interpretation generated.";
-    result = result
-      .replace(/Title:/g, '👉 Title:')
-      .replace(/Symbols:/g, '✅ Symbols:')
-      .replace(/Interpretation:/g, '✅ Interpretation:')
-      .replace(/Encouragement:/g, '✅ Encouragement:')
-      .replace(/^[\-\*]\s?/gm, '📍')
-      .replace(/\*\*(.*?)\*\*/g, '$1');
-
-    window.latestInterpretation = result.replace(/<[^>]+>/g, '');
-    resultContainer.innerHTML = `<div class="result-box">${result}</div>`;
 
   } catch (error) {
     console.error(error);
-    resultContainer.innerHTML = `<div class="result-box">An error occurred while interpreting your dream. Please try again later.</div>`;
+    resultContainer.innerHTML = `<div class="result-box">Network error. Please try again later.</div>`;
   }
 }
 
 function copyResult() {
   if (!window.latestInterpretation) {
-    alert("No dream interpretation to share yet.");
+    alert("No dream interpretation to copy.");
     return;
   }
 
@@ -50,5 +40,5 @@ function copyResult() {
   hiddenClipboard.value = window.latestInterpretation;
   hiddenClipboard.select();
   document.execCommand("copy");
-  alert("Interpretation copied! You can now share it anywhere.");
+  alert("Interpretation copied!");
 }
