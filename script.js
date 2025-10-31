@@ -1,5 +1,5 @@
 // Replace this with your actual Google Apps Script Web App URL
-const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxvTSA17Nqu1wtSQTdeemApS3AIn0Yj4IonBcvpahI9YRlGTj4hxD1MKwi7d38hQulN/exec';
+const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw27_gLq2xwcV1ou81dMUrU8fTVgkAqphnnqgOC6k9DbRgLoDbtfnVnIkEzuT5qQJh8/exec';
 
 async function interpretDream() {
     const input = document.getElementById("dreamInput").value.trim();
@@ -13,6 +13,21 @@ async function interpretDream() {
     resultContainer.innerHTML = '<div class="loading">Interpreting your dream...</div>';
 
     try {
+        // First, test if the endpoint is accessible
+        const testUrl = GAS_WEB_APP_URL + '?test=true';
+        console.log('Testing API endpoint:', testUrl);
+        
+        try {
+            const testResponse = await fetch(testUrl);
+            if (!testResponse.ok) {
+                throw new Error(`API test failed with status: ${testResponse.status}`);
+            }
+            console.log('API endpoint test successful');
+        } catch (testError) {
+            console.error('API endpoint test failed:', testError);
+            throw new Error('API endpoint is not accessible. Please check the deployment settings.');
+        }
+
         // JSONP approach: create a unique callback and inject a <script> tag.
         console.log('Sending JSONP request to:', GAS_WEB_APP_URL);
 
