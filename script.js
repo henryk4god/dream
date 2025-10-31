@@ -1,5 +1,5 @@
 // Replace this with your actual Google Apps Script Web App URL
-const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxpNPM3SsWkdWoU88OajC4YcTxJYoRMGfyDIXSH51gvNwEYxcfAZdMYBQ1nNBHAZ2F3/exec';
+const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzowBog-lRuxrZ2KUwRnbk9vwZWH9PFQblEF4YMMoExCnokW46D5qbDiNBWVsIXCQtF/exec';
 
 async function interpretDream() {
     const input = document.getElementById("dreamInput").value.trim();
@@ -16,8 +16,6 @@ async function interpretDream() {
         console.log('Sending request to:', GAS_WEB_APP_URL);
         const response = await fetch(GAS_WEB_APP_URL, {
             method: "POST",
-            mode: 'cors',
-            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
             },
