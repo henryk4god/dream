@@ -13,8 +13,11 @@ async function interpretDream() {
     resultContainer.innerHTML = '<div class="loading">Interpreting your dream...</div>';
 
     try {
+        console.log('Sending request to:', GAS_WEB_APP_URL);
         const response = await fetch(GAS_WEB_APP_URL, {
             method: "POST",
+            mode: 'cors',
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
             },
@@ -22,6 +25,12 @@ async function interpretDream() {
                 dream: input
             })
         });
+        
+        if (!response.ok) {
+            console.error('Server responded with status:', response.status);
+            console.error('Response headers:', [...response.headers.entries()]);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
         
