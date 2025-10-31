@@ -1,5 +1,5 @@
 // Replace this with your actual Google Apps Script Web App URL
-const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzowBog-lRuxrZ2KUwRnbk9vwZWH9PFQblEF4YMMoExCnokW46D5qbDiNBWVsIXCQtF/exec';
+const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxvTSA17Nqu1wtSQTdeemApS3AIn0Yj4IonBcvpahI9YRlGTj4hxD1MKwi7d38hQulN/exec';
 
 async function interpretDream() {
     const input = document.getElementById("dreamInput").value.trim();
@@ -13,38 +13,39 @@ async function interpretDream() {
     resultContainer.innerHTML = '<div class="loading">Interpreting your dream...</div>';
 
     try {
-        console.log('Sending request to:', GAS_WEB_APP_URL);
-        const response = await fetch(GAS_WEB_APP_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                dream: input
-            })
-        });
-        
-        if (!response.ok) {
-            console.error('Server responded with status:', response.status);
-            console.error('Response headers:', [...response.headers.entries()]);
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // JSONP approach: create a unique callback and inject a <script> tag.
+        console.log('Sending JSONP request to:', GAS_WEB_APP_URL);
 
-        const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.error);
-        }
+        const callbackName = '__dreamCallback_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+        let timedOut = false;
 
-        window.latestInterpretation = data.interpretation;
-        resultContainer.innerHTML = `<div class="result-box">${data.interpretation}</div>`;
-    } catch (error) {
-        console.error(error);
-        resultContainer.innerHTML = `<div class="result-box">An error occurred while interpreting your dream. Please try again later.</div>`;
-        
-        // Fallback response
-        setTimeout(() => {
-            const fakeResponse = `
+        // Setup global callback
+        window[callbackName] = function(data) {
+            if (timedOut) return;
+            cleanup();
+
+            if (!data) {
+                onError(new Error('No data received'));
+                return;
+            }
+
+            if (data.error) {
+                onError(new Error(data.error));
+                return;
+            }
+
+            window.latestInterpretation = data.interpretation;
+            resultContainer.innerHTML = `<div class="result-box">${data.interpretation}</div>`;
+        };
+
+        // Error handler
+        function onError(err) {
+            console.error(err);
+            resultContainer.innerHTML = `<div class="result-box">An error occurred while interpreting your dream. Please try again later.</div>`;
+
+            // fallback response
+            setTimeout(() => {
+                const fakeResponse = `
 👉 Title: Climbing a Ladder  
 ✅ Symbols:  
 📍Ladder: spiritual progress  
@@ -53,11 +54,41 @@ async function interpretDream() {
 You are on a journey of spiritual growth. The ladder represents the steps God is leading you to take, one at a time, toward a higher calling.  
 ✅ Encouragement:  
 Don't be afraid of how high you're climbing — you're not alone. Keep stepping in faith!
-            `;
+                `;
 
-            window.latestInterpretation = fakeResponse;
-            resultContainer.innerHTML = `<div class="result-box">${fakeResponse}</div>`;
-        }, 1000);
+                window.latestInterpretation = fakeResponse;
+                resultContainer.innerHTML = `<div class="result-box">${fakeResponse}</div>`;
+            }, 1000);
+        }
+
+        // Cleanup script tag and callback
+        const script = document.createElement('script');
+        function cleanup() {
+            try { if (script.parentNode) script.parentNode.removeChild(script); } catch (e) {}
+            try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+            clearTimeout(timeoutHandle);
+        }
+
+        // Timeout in case the script fails to load or callback never called
+        const timeoutHandle = setTimeout(() => {
+            timedOut = true;
+            cleanup();
+            onError(new Error('Request timed out'));
+        }, 10000); // 10s
+
+        script.src = GAS_WEB_APP_URL + '?dream=' + encodeURIComponent(input) + '&callback=' + callbackName;
+        script.async = true;
+        script.onerror = function(evt) {
+            timedOut = true;
+            cleanup();
+            onError(new Error('Script load error'));
+        };
+
+        document.body.appendChild(script);
+
+    } catch (error) {
+        console.error(error);
+        resultContainer.innerHTML = `<div class="result-box">An unexpected error occurred. Please try again later.</div>`;
     }
 }
 
