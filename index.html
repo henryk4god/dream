@@ -1,26 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblical Dream Interpreter</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="app-container">
-        <div class="app-header">
-            <h2>Biblical Dream Interpreter</h2>
-        </div>
+<style>
+  /* ... (Your original CSS styles remain unchanged here) ... */
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #e8f0fe;
+    margin: 0;
+    padding: 0;
+  }
 
-        <textarea id="dreamInput" rows="6" placeholder="Type your dream here..."></textarea>
+  .app-container {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
 
-        <button onclick="interpretDream()">Interpret Dream</button>
-        <button class="share-button" onclick="copyResult()">Copy Interpretation</button>
+  .app-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
 
-        <input type="text" id="hiddenClipboard" style="position:absolute; left:-9999px;" readonly />
-        <div id="resultContainer"></div>
-    </div>
+  .app-header h2 {
+    font-size: 22px;
+    color: #333;
+    margin: 0;
+  }
 
-    <script src="script.js"></script>
-</body>
-</html>
+  textarea {
+    width: 100%;
+    padding: 14px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 12px;
+    background: #f9f9f9;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    color: white;
+    background: #4a90e2;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #357ab7;
+  }
+
+  .share-button {
+    background: #009688;
+  }
+
+  .share-button:hover {
+    background: #00796b;
+  }
+
+  .result-box {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 20px;
+    background: #f1f4f8;
+    font-size: 15px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    color: #444;
+  }
+
+  /* Spinner Styles */
+  .spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4a90e2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+
+  .loading-text {
+    font-weight: bold;
+    color: #444;
+    font-size: 16px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 480px) {
+    .app-container {
+      margin: 15px;
+      padding: 15px;
+    }
+
+    .app-header h2 {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<div class="app-container">
+  <div class="app-header">
+    <h2>Biblical Dream Interpreter</h2>
+  </div>
+
+  <textarea id="dreamInput" rows="6" placeholder="Type your dream here..."></textarea>
+
+  <button onclick="interpretDream()">Interpret Dream</button>
+  <button class="share-button" onclick="copyResult()">Copy Interpretation</button>
+
+  <input type="text" id="hiddenClipboard" style="position:absolute; left:-9999px;" readonly />
+  <div id="resultContainer"></div>
+</div>
+
+<script>
+  // 💡 IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
+  const GAS_WEB_APP_URL = "YOUR_DEPLOYED_GAS_WEB_APP_URL_HERE";
+
+  async function interpretDream() {
+    const input = document.getElementById("dreamInput").value.trim();
+    const resultContainer = document.getElementById("resultContainer");
+
+    if (!input) {
+      resultContainer.innerHTML = '<div class="result-box">Please enter a dream to interpret.</div>';
+      return;
+    }
+
+    // Show spinner while interpreting
+    resultContainer.innerHTML = `
+      <div class="spinner-container">
+        <div class="spinner"></div>
+        <div class="loading-text">Interpreting your dream...</div>
+      </div>
+    `;
+
+    if (GAS_WEB_APP_URL === "https://script.google.com/macros/s/AKfycbz9y1rhORDM7GPCIKQA0SUXkGtA0wRen3-k9kervxaBQBEusYFxFXMji3vCJU36nI7nzA/exec") {
+      resultContainer.innerHTML = '<div class="result-box">ERROR: Please replace "YOUR_DEPLOYED_GAS_WEB_APP_URL_HERE" in the script with your actual Google Apps Script Web App URL.</div>';
+      return;
+    }
+
+    try {
+      // 🚀 Call the secure Google Apps Script backend
+      const response = await fetch(GAS_WEB_APP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        // Send ONLY the dream text to the backend
+        body: JSON.stringify({
+          dream: input
+        })
+      });
+
+      const data = await response.json();
+      console.log("Backend Response:", data);
+
+      let result;
+
+      if (data.success && data.interpretation) {
+        // Successful response from the Apps Script
+        result = data.interpretation;
+      } else {
+        // Handle error from the Apps Script or the AI service
+        result = `Sorry, an error occurred: ${data.error || "Could not generate interpretation."}`;
+      }
+
+      // Apply the same formatting logic as before
+      result = result.replace(/Title:/g, '👉 Title:')
+                      .replace(/Symbols:/g, '✅ Symbols:')
+                      .replace(/Interpretation:/g, '✅ Interpretation:')
+                      .replace(/Encouragement:/g, '✅ Encouragement:')
+                      .replace(/^[\-\*]\s?/gm, '📍')
+                      .replace(/\*\*(.*?)\*\*/g, '$1');
+      
+      window.latestInterpretation = result.replace(/<[^>]+>/g, '');
+      resultContainer.innerHTML = `<div class="result-box">${result}</div>`;
+
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      resultContainer.innerHTML = `<div class="result-box">A network error occurred while connecting to the backend. Please check your internet connection and the deployed URL.</div>`;
+    }
+  }
+
+  function copyResult() {
+    if (!window.latestInterpretation) {
+      alert("No dream interpretation to share yet.");
+      return;
+    }
+
+    const hiddenClipboard = document.getElementById("hiddenClipboard");
+    hiddenClipboard.value = window.latestInterpretation;
+    hiddenClipboard.select();
+    document.execCommand("copy");
+    alert("Interpretation copied! You can now share it anywhere.");
+  }
+</script>
