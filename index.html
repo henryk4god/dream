@@ -138,7 +138,7 @@
 
 <script>
   // 💡 IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
-  const GAS_WEB_APP_URL = "YOUR_DEPLOYED_GAS_WEB_APP_URL_HERE";
+  const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz9y1rhORDM7GPCIKQA0SUXkGtA0wRen3-k9kervxaBQBEusYFxFXMji3vCJU36nI7nzA/exec";
 
   async function interpretDream() {
     const input = document.getElementById("dreamInput").value.trim();
@@ -157,7 +157,7 @@
       </div>
     `;
 
-    if (GAS_WEB_APP_URL === "https://script.google.com/macros/s/AKfycbz9y1rhORDM7GPCIKQA0SUXkGtA0wRen3-k9kervxaBQBEusYFxFXMji3vCJU36nI7nzA/exec") {
+    if (GAS_WEB_APP_URL === "YOUR_DEPLOYED_GAS_WEB_APP_URL_HERE") {
       resultContainer.innerHTML = '<div class="result-box">ERROR: Please replace "YOUR_DEPLOYED_GAS_WEB_APP_URL_HERE" in the script with your actual Google Apps Script Web App URL.</div>';
       return;
     }
